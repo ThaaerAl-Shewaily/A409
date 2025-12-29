@@ -3,64 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة متابعة عمارة A409</title>
+    <title>نظام جباية عمارة A409</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background: #f0f2f5; }
-        .paid { background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%) !important; color: white; border: none; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3); }
-        .unpaid { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important; color: white; border: none; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
-        .pending { background: #ffffff; color: #64748b; border: 1px solid #e2e8f0; }
-        .apt-box { 
-            height: 55px; 
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 10px; 
-            font-weight: 800;
-            font-size: 14px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .apt-box:hover { transform: translateY(-3px); cursor: default; }
-        .floor-row { border-bottom: 1px solid #e2e8f0; padding: 15px 0; display: flex; align-items: center; }
-        .floor-title { min-width: 80px; font-weight: 800; color: #1e293b; font-size: 12px; text-align: center; }
-        .stats-card { background: white; border-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        body { font-family: 'Cairo', sans-serif; background: #f8fafc; }
+        .paid { background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; color: white; border: none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+        .unpaid { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important; color: white; border: none; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
+        .pending { background: white; color: #94a3b8; border: 1px solid #e2e8f0; }
+        .apt-box { height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-weight: 800; transition: all 0.3s ease; cursor: pointer; position: relative; }
+        .apt-box:hover { transform: translateY(-3px); z-index: 10; }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .modal-content { background: white; margin: 20% auto; padding: 25px; border-radius: 20px; width: 85%; max-width: 400px; text-align: center; }
     </style>
 </head>
-<body class="bg-gray-50 pb-20">
+<body class="pb-20">
 
-    <div class="bg-slate-900 text-white pb-10 pt-8 px-4 rounded-b-[40px] shadow-2xl overflow-hidden relative">
-        <div class="relative z-10 max-w-4xl mx-auto text-center">
-            <h1 class="text-3xl font-extrabold tracking-tight mb-2">عمارة A409</h1>
-            <p class="text-blue-400 font-semibold opacity-90">نظام متابعة منظومة الكاميرات الأمنية</p>
-            
-            <div class="grid grid-cols-3 gap-3 mt-8 max-w-md mx-auto">
-                <div class="stats-card p-3">
-                    <span id="paidCount" class="block text-2xl font-black text-green-600">0</span>
-                    <span class="text-[10px] text-gray-500 font-bold uppercase">مسدد</span>
-                </div>
-                <div class="stats-card p-3">
-                    <span id="unpaidCount" class="block text-2xl font-black text-red-600">0</span>
-                    <span class="text-[10px] text-gray-500 font-bold uppercase">ممتنع</span>
-                </div>
-                <div class="stats-card p-3 border-b-4 border-blue-500">
-                    <span class="block text-2xl font-black text-slate-800">120</span>
-                    <span class="text-[10px] text-gray-500 font-bold uppercase">الإجمالي</span>
-                </div>
+    <div class="bg-slate-900 text-white pt-10 pb-16 px-6 rounded-b-[50px] shadow-2xl overflow-hidden text-center">
+        <h1 class="text-3xl font-extrabold mb-2">عمارة A409</h1>
+        <p class="text-blue-400 font-medium mb-8">متابعة مبالغ منظومة الكاميرات</p>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <div class="bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/10">
+                <span id="paidCount" class="block text-2xl font-black text-green-400">0</span>
+                <span class="text-[10px] uppercase text-gray-400 font-bold">شقة مسددة</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/10">
+                <span id="unpaidCount" class="block text-2xl font-black text-red-400">0</span>
+                <span class="text-[10px] uppercase text-gray-400 font-bold">شقة ممتنعة</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/20 col-span-2">
+                <span id="totalAmount" class="block text-2xl font-black text-yellow-400">0</span>
+                <span class="text-[10px] uppercase text-gray-400 font-bold">إجمالي المبالغ المجموعة (دينار)</span>
             </div>
         </div>
     </div>
 
-    <div class="max-w-6xl mx-auto px-4 -mt-6 relative z-20">
-        <div class="bg-white rounded-3xl p-4 shadow-xl border border-gray-100">
-            <div class="hidden md:grid grid-cols-12 gap-2 mb-4 px-2 text-[10px] font-bold text-gray-400 text-center uppercase">
-                <div>01</div><div>02</div><div>03</div><div>04</div><div>05</div><div>06</div>
-                <div>07</div><div>08</div><div>09</div><div>10</div><div>11</div><div>12</div>
-            </div>
-
-            <div id="app" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-12 gap-2">
+    <div class="max-w-7xl mx-auto px-4 -mt-8 relative z-10">
+        <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+            <div id="app" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-12 gap-3">
                 </div>
+        </div>
+    </div>
+
+    <div id="aptModal" class="modal">
+        <div class="modal-content shadow-2xl">
+            <h2 id="modalTitle" class="text-2xl font-black text-slate-800 mb-2">شقة</h2>
+            <div id="modalBody" class="py-4"></div>
+            <button onclick="closeModal()" class="bg-slate-800 text-white px-8 py-2 rounded-full font-bold">إغلاق</button>
         </div>
     </div>
 
@@ -69,21 +59,22 @@
 
         const app = document.getElementById('app');
         const apartments = [];
-        for(let i=1; i<=12; i++) apartments.push('G'+i);
+        for(let i=1; i<=12; i++) apartments.push('G' + i);
         for(let f=1; f<=9; f++) {
             for(let i=1; i<=12; i++) {
-                apartments.push(f + (i < 10 ? '0'+i : i).toString());
+                apartments.push(f + (i < 10 ? '0' + i : i).toString());
             }
         }
 
-        // Initial Build
-        apartments.forEach(id => {
-            app.innerHTML += `
-                <div id="apt-${id}" class="apt-box pending shadow-sm group">
-                    <span class="text-[8px] opacity-60 font-bold uppercase mb-1">شقة</span>
-                    <span class="text-sm">${id}</span>
-                </div>`;
-        });
+        let globalData = {};
+
+        function initGrid() {
+            app.innerHTML = apartments.map(id => `
+                <div id="apt-${id}" onclick="showDetails('${id}')" class="apt-box pending shadow-sm">
+                    ${id}
+                </div>
+            `).join('');
+        }
 
         async function updateData() {
             try {
@@ -91,34 +82,71 @@
                 const text = await res.text();
                 const rows = text.split('\n').map(r => r.split(','));
                 
-                let paid = 0, unpaid = 0;
-                const statusMap = {};
+                let paidCount = 0, unpaidCount = 0, totalMoney = 0;
                 
                 rows.forEach(row => {
                     const id = row[0]?.replace(/"/g, '').trim();
                     const status = row[1]?.replace(/"/g, '').trim();
-                    if(id) statusMap[id] = status;
-                });
+                    const amount = parseFloat(row[2]?.replace(/"/g, '').trim()) || 0;
 
-                apartments.forEach(id => {
-                    const status = statusMap[id];
-                    const element = document.getElementById('apt-' + id);
-                    if (element) {
-                        element.classList.remove('paid', 'unpaid', 'pending');
-                        if (status === 'مسدد') { element.classList.add('paid'); paid++; }
-                        else if (status === 'ممتنع') { element.classList.add('unpaid'); unpaid++; }
-                        else { element.classList.add('pending'); }
+                    if(id) {
+                        globalData[id] = { status, amount };
+                        const el = document.getElementById('apt-' + id);
+                        if (el) {
+                            el.classList.remove('paid', 'unpaid', 'pending');
+                            if (status === 'مسدد') { 
+                                el.classList.add('paid'); 
+                                paidCount++; 
+                                totalMoney += amount;
+                            } else if (status === 'ممتنع') { 
+                                el.classList.add('unpaid'); 
+                                unpaidCount++; 
+                            } else { 
+                                el.classList.add('pending'); 
+                            }
+                        }
                     }
                 });
 
-                document.getElementById('paidCount').innerText = paid;
-                document.getElementById('unpaidCount').innerText = unpaid;
+                document.getElementById('paidCount').innerText = paidCount;
+                document.getElementById('unpaidCount').innerText = unpaidCount;
+                document.getElementById('totalAmount').innerText = totalMoney.toLocaleString();
 
             } catch (e) { console.log("Updating..."); }
         }
 
+        function showDetails(id) {
+            const info = globalData[id];
+            const modal = document.getElementById('aptModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+
+            title.innerText = "شقة رقم " + id;
+            if (info && info.status === 'مسدد') {
+                body.innerHTML = `
+                    <div class="text-green-600 font-bold text-xl mb-2 italic tracking-widest uppercase">تم التسديد ✅</div>
+                    <div class="text-slate-500 text-sm">المبلغ المدفوع:</div>
+                    <div class="text-3xl font-black text-slate-800">${info.amount.toLocaleString()} <span class="text-sm">د.ع</span></div>
+                `;
+            } else if (info && info.status === 'ممتنع') {
+                body.innerHTML = `<div class="text-red-600 font-bold text-lg italic tracking-widest uppercase">ممتنع عن الدفع ✕</div>`;
+            } else {
+                body.innerHTML = `<div class="text-gray-400 font-bold italic tracking-widest uppercase text-lg italic tracking-widest uppercase">بانتظار الرد...</div>`;
+            }
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById('aptModal').style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('aptModal')) closeModal();
+        }
+
+        initGrid();
         updateData();
-        setInterval(updateData, 15000);
+        setInterval(updateData, 20000);
     </script>
 </body>
 </html>
