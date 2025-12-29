@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متابعة عمارة A409</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #f1f5f9; }
+        .paid { background-color: #22c55e !important; color: white; border: none; }
+        .unpaid { background-color: #ef4444 !important; color: white; border: none; }
+        .pending { background-color: white; color: #64748b; border: 1px solid #e2e8f0; }
+        .apt-box { height: 65px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; transition: 0.2s; }
+        .apt-box:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body class="pb-10">
+
+    <div class="sticky top-0 z-50 bg-slate-900 text-white p-5 shadow-xl text-center">
+        <h1 class="text-2xl font-extrabold mb-1">عمارة A409</h1>
+        <p class="text-blue-400 text-sm font-bold">حالة تسديد منظومة الكاميرات</p>
+        
+        <div class="flex justify-center gap-6 mt-4 pt-3 border-t border-slate-700">
+            <div class="flex flex-col items-center">
+                <span id="paidCount" class="text-xl font-bold text-green-400">0</span>
+                <span class="text-[10px] text-slate-400 uppercase">مسدد</span>
+            </div>
+            <div class="flex flex-col items-center border-x border-slate-700 px-6">
+                <span id="unpaidCount" class="text-xl font-bold text-red-400">0</span>
+                <span class="text-[10px] text-slate-400 uppercase">ممتنع</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span id="totalCount" class="text-xl font-bold text-white">0</span>
+                <span class="text-[10px] text-slate-400 uppercase">المجموع</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="app" class="p-3 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-10 gap-2 max-w-4xl mx-auto">
+        <div class="col-span-full text-center py-10 text-gray-500 italic">جاري جلب البيانات من Google Sheets...</div>
+    </div>
+
+    <script>
+        // رابط الـ CSV الخاص بك (تأكد من أنه الرابط الصحيح)
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRjICCoSStBnyISNty1YaREabt2LlEZ-9TmY6zgnLc7eIOpGXUC_N14SrhWl6FYH-3Nqbhy47So9-nW/pub?output=csv';
+
+        async function loadData() {
+            try {
+                // نستخدم Fetch مباشرة، على الكمبيوتر ستعمل بشكل أفضل
+                const response = await fetch(SHEET_URL);
+                const data = await response.text();
+                
+                const rows = data.split('\n').filter(row => row.trim() !== '');
+                const app = document.getElementById('app');
+                app.innerHTML = '';
+
+                let paid = 0;
+                let unpaid = 0;
+
+                for (let i = 1; i < rows.length; i++) {
+                    const columns = rows[i].split(',');
+                    const id = columns[0].replace(/"/g, '').trim();
+                    const status = columns[1] ? columns[1].replace(/"/g, '').trim() : '';
+
+                    let statusClass = 'pending';
+                    if (status === 'مسدد') { statusClass = 'paid'; paid++; }
+                    else if (status === 'ممتنع') { statusClass = 'unpaid'; unpaid++; }
+
+                    app.innerHTML += `
+                        <div class="apt-box ${statusClass} shadow-sm border">
+                            <span class="text-[10px] font-bold">شقة</span>
+                            <span class="text-lg font-black leading-none">${id}</span>
+                        </div>
+                    `;
+                }
+
+                document.getElementById('paidCount').innerText = paid;
+                document.getElementById('unpaidCount').innerText = unpaid;
+                document.getElementById('totalCount').innerText = rows.length - 1;
+
+            } catch (error) {
+                document.getElementById('app').innerHTML = `<div class="col-span-full text-red-500 text-center p-5">فشل في الاتصال. تأكد من إعدادات "النشر على الويب" في جوجل شيت.</div>`;
+            }
+        }
+
+        loadData();
+        setInterval(loadData, 30000);
+    </script>
+</body>
+</html>
