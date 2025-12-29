@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام جباية عمارة A409</title>
+    <title>نظام متابعة عمارة A409</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -11,46 +11,50 @@
         .paid { background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; color: white; border: none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
         .unpaid { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important; color: white; border: none; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2); }
         .pending { background: white; color: #94a3b8; border: 1px solid #e2e8f0; }
-        .apt-box { height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-weight: 800; transition: all 0.3s ease; cursor: pointer; position: relative; }
-        .apt-box:hover { transform: translateY(-3px); z-index: 10; }
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
-        .modal-content { background: white; margin: 20% auto; padding: 25px; border-radius: 20px; width: 85%; max-width: 400px; text-align: center; }
+        .apt-box { height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-weight: 800; transition: all 0.3s ease; cursor: pointer; }
+        .apt-box:hover { transform: translateY(-3px); z-index: 10; scale: 1.05; }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
+        .modal-content { background: white; margin: 15% auto; padding: 30px; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; position: relative; }
     </style>
 </head>
 <body class="pb-20">
 
-    <div class="bg-slate-900 text-white pt-10 pb-16 px-6 rounded-b-[50px] shadow-2xl overflow-hidden text-center">
-        <h1 class="text-3xl font-extrabold mb-2">عمارة A409</h1>
-        <p class="text-blue-400 font-medium mb-8">متابعة مبالغ منظومة الكاميرات</p>
+    <div class="bg-slate-900 text-white pt-10 pb-20 px-6 rounded-b-[50px] shadow-2xl text-center relative">
+        <h1 class="text-3xl font-extrabold mb-2 tracking-tight">عمارة A409</h1>
+        <p class="text-blue-400 font-medium mb-8">لوحة متابعة الجباية والمبالغ</p>
         
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            <div class="bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/10">
-                <span id="paidCount" class="block text-2xl font-black text-green-400">0</span>
-                <span class="text-[10px] uppercase text-gray-400 font-bold">شقة مسددة</span>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+            <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-inner">
+                <span id="paidCount" class="block text-3xl font-black text-green-400 leading-none mb-1">0</span>
+                <span class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">شقة مسددة</span>
             </div>
-            <div class="bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/10">
-                <span id="unpaidCount" class="block text-2xl font-black text-red-400">0</span>
-                <span class="text-[10px] uppercase text-gray-400 font-bold">شقة ممتنعة</span>
+            <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 shadow-inner">
+                <span id="unpaidCount" class="block text-3xl font-black text-red-400 leading-none mb-1">0</span>
+                <span class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">شقة ممتنعة</span>
             </div>
-            <div class="bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/20 col-span-2">
-                <span id="totalAmount" class="block text-2xl font-black text-yellow-400">0</span>
-                <span class="text-[10px] uppercase text-gray-400 font-bold">إجمالي المبالغ المجموعة (دينار)</span>
+            <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-blue-500/30 col-span-2 shadow-inner">
+                <span id="totalAmount" class="block text-3xl font-black text-yellow-400 leading-none mb-1">0</span>
+                <span class="text-[10px] uppercase text-gray-400 font-bold tracking-wider italic">إجمالي المبالغ الواصلة (دينار)</span>
             </div>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 -mt-8 relative z-10">
-        <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 -mt-10 relative z-10">
+        <div class="bg-white rounded-3xl p-6 shadow-2xl border border-gray-100">
+            <div class="hidden md:grid grid-cols-12 gap-3 mb-4 px-2 text-[10px] font-bold text-gray-300 text-center uppercase tracking-tighter">
+                <div>01</div><div>02</div><div>03</div><div>04</div><div>05</div><div>06</div><div>07</div><div>08</div><div>09</div><div>10</div><div>11</div><div>12</div>
+            </div>
             <div id="app" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-12 gap-3">
                 </div>
         </div>
     </div>
 
-    <div id="aptModal" class="modal">
-        <div class="modal-content shadow-2xl">
-            <h2 id="modalTitle" class="text-2xl font-black text-slate-800 mb-2">شقة</h2>
-            <div id="modalBody" class="py-4"></div>
-            <button onclick="closeModal()" class="bg-slate-800 text-white px-8 py-2 rounded-full font-bold">إغلاق</button>
+    <div id="aptModal" class="modal" onclick="closeModal()">
+        <div class="modal-content shadow-2xl animate-in zoom-in duration-300" onclick="event.stopPropagation()">
+            <div id="modalStatusIcon" class="mb-4 text-5xl"></div>
+            <h2 id="modalTitle" class="text-2xl font-black text-slate-800 mb-1">شقة</h2>
+            <div id="modalBody" class="py-4 border-t border-gray-100 mt-4"></div>
+            <button onclick="closeModal()" class="w-full bg-slate-800 text-white py-3 rounded-xl font-bold hover:bg-slate-700 transition-colors">إغلاق</button>
         </div>
     </div>
 
@@ -59,6 +63,7 @@
 
         const app = document.getElementById('app');
         const apartments = [];
+        // توليد قائمة الـ 120 شقة
         for(let i=1; i<=12; i++) apartments.push('G' + i);
         for(let f=1; f<=9; f++) {
             for(let i=1; i<=12; i++) {
@@ -68,10 +73,11 @@
 
         let globalData = {};
 
+        // بناء الشبكة الفارغة أولاً
         function initGrid() {
             app.innerHTML = apartments.map(id => `
-                <div id="apt-${id}" onclick="showDetails('${id}')" class="apt-box pending shadow-sm">
-                    ${id}
+                <div id="apt-${id}" onclick="showDetails('${id}')" class="apt-box pending shadow-sm group">
+                    <span class="text-xs group-hover:scale-110 transition-transform">${id}</span>
                 </div>
             `).join('');
         }
@@ -82,56 +88,73 @@
                 const text = await res.text();
                 const rows = text.split('\n').map(r => r.split(','));
                 
-                let paidCount = 0, unpaidCount = 0, totalMoney = 0;
-                
+                let pCount = 0, uCount = 0, tMoney = 0;
+                const statusMap = {};
+
+                // قراءة البيانات من الإكسل
                 rows.forEach(row => {
                     const id = row[0]?.replace(/"/g, '').trim();
                     const status = row[1]?.replace(/"/g, '').trim();
                     const amount = parseFloat(row[2]?.replace(/"/g, '').trim()) || 0;
+                    if(id) statusMap[id] = { status, amount };
+                });
 
-                    if(id) {
-                        globalData[id] = { status, amount };
-                        const el = document.getElementById('apt-' + id);
-                        if (el) {
-                            el.classList.remove('paid', 'unpaid', 'pending');
-                            if (status === 'مسدد') { 
-                                el.classList.add('paid'); 
-                                paidCount++; 
-                                totalMoney += amount;
-                            } else if (status === 'ممتنع') { 
-                                el.classList.add('unpaid'); 
-                                unpaidCount++; 
-                            } else { 
-                                el.classList.add('pending'); 
-                            }
+                // تحديث حالة كل مربع وحساب الإحصائيات من المربعات
+                apartments.forEach(id => {
+                    const data = statusMap[id] || { status: '', amount: 0 };
+                    globalData[id] = data; // تخزين للبوب أب
+                    
+                    const el = document.getElementById('apt-' + id);
+                    if (el) {
+                        el.classList.remove('paid', 'unpaid', 'pending');
+                        if (data.status === 'مسدد') {
+                            el.classList.add('paid');
+                            pCount++;
+                            tMoney += data.amount;
+                        } else if (data.status === 'ممتنع') {
+                            el.classList.add('unpaid');
+                            uCount++;
+                        } else {
+                            el.classList.add('pending');
                         }
                     }
                 });
 
-                document.getElementById('paidCount').innerText = paidCount;
-                document.getElementById('unpaidCount').innerText = unpaidCount;
-                document.getElementById('totalAmount').innerText = totalMoney.toLocaleString();
+                // عرض الإحصائيات النهائية
+                document.getElementById('paidCount').innerText = pCount;
+                document.getElementById('unpaidCount').innerText = uCount;
+                document.getElementById('totalAmount').innerText = tMoney.toLocaleString();
 
-            } catch (e) { console.log("Updating..."); }
+            } catch (e) { console.error("خطأ في تحديث البيانات"); }
         }
 
         function showDetails(id) {
             const info = globalData[id];
             const modal = document.getElementById('aptModal');
-            const title = document.getElementById('modalTitle');
+            const icon = document.getElementById('modalStatusIcon');
             const body = document.getElementById('modalBody');
 
-            title.innerText = "شقة رقم " + id;
+            document.getElementById('modalTitle').innerText = "تفاصيل شقة " + id;
+            
             if (info && info.status === 'مسدد') {
+                icon.innerText = "✅";
                 body.innerHTML = `
-                    <div class="text-green-600 font-bold text-xl mb-2 italic tracking-widest uppercase">تم التسديد ✅</div>
-                    <div class="text-slate-500 text-sm">المبلغ المدفوع:</div>
-                    <div class="text-3xl font-black text-slate-800">${info.amount.toLocaleString()} <span class="text-sm">د.ع</span></div>
+                    <p class="text-gray-500 text-sm mb-1">حالة الدفع</p>
+                    <p class="text-green-600 font-extrabold text-xl mb-4">تم التسديد بنجاح</p>
+                    <p class="text-gray-500 text-sm mb-1">المبلغ المدفوع</p>
+                    <p class="text-3xl font-black text-slate-800">${info.amount.toLocaleString()} <span class="text-sm font-normal text-gray-400">د.ع</span></p>
                 `;
             } else if (info && info.status === 'ممتنع') {
-                body.innerHTML = `<div class="text-red-600 font-bold text-lg italic tracking-widest uppercase">ممتنع عن الدفع ✕</div>`;
+                icon.innerText = "❌";
+                body.innerHTML = `
+                    <p class="text-red-600 font-extrabold text-xl">ممتنع عن المشاركة</p>
+                    <p class="text-gray-400 text-sm mt-2 font-medium">نرجو مراجعة اللجنة المشرفة</p>
+                `;
             } else {
-                body.innerHTML = `<div class="text-gray-400 font-bold italic tracking-widest uppercase text-lg italic tracking-widest uppercase">بانتظار الرد...</div>`;
+                icon.innerText = "⏳";
+                body.innerHTML = `
+                    <p class="text-gray-400 font-bold text-lg italic">بانتظار تأكيد الحالة...</p>
+                `;
             }
             modal.style.display = "block";
         }
@@ -140,13 +163,9 @@
             document.getElementById('aptModal').style.display = "none";
         }
 
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('aptModal')) closeModal();
-        }
-
         initGrid();
         updateData();
-        setInterval(updateData, 20000);
+        setInterval(updateData, 30000); // تحديث كل 30 ثانية
     </script>
 </body>
 </html>
